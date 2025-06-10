@@ -24,7 +24,7 @@ class StudentForm(FlaskForm):
     gender = SelectField('Giới tính', choices=[('Nam', 'Nam'), ('Nữ', 'Nữ'), ('Khác', 'Khác')], validators=[Optional()])
     email = StringField('Email', validators=[Optional(), Email(), Length(max=100)])
     class_id = SelectField('Lớp', coerce=int, validators=[DataRequired()])
-    score = FloatField('Điểm', validators=[Optional()])
+    score = FloatField('Điểm', validators=[Optional(), NumberRange(min=0, max=10, message='Điểm phải từ 0 đến 10')])
     avatar = StringField('Ảnh đại diện (URL)', validators=[Optional(), Length(max=255)])
     submit = SubmitField('Lưu')
 

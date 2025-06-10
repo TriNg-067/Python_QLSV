@@ -168,6 +168,9 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Lấy data động từ backend
+    const gradeData = JSON.parse('{{ (score_ranges.values()|list)|tojson|safe }}');
+    const genderData = JSON.parse('{{ (gender_stats.values()|list)|tojson|safe }}');
     // Biểu đồ phân bố điểm số
     const gradeCtx = document.getElementById('gradeDistributionChart').getContext('2d');
     const gradeChart = new Chart(gradeCtx, {
@@ -176,7 +179,7 @@
             labels: ['Dưới 5', '5-6.4', '6.5-7.9', '8-8.9', '9-10'],
             datasets: [{
                 label: 'Số lượng sinh viên',
-                data: [45, 120, 350, 280, 229],
+                data: gradeData,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.7)',
                     'rgba(255, 159, 64, 0.7)',
@@ -206,7 +209,6 @@
             }
         }
     });
-
     // Biểu đồ phân bố giới tính
     const genderCtx = document.getElementById('genderChart').getContext('2d');
     const genderChart = new Chart(genderCtx, {
@@ -215,7 +217,7 @@
             labels: ['Nam', 'Nữ'],
             datasets: [{
                 label: 'Giới tính',
-                data: [580, 444],
+                data: genderData,
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.8)',
                     'rgba(255, 99, 132, 0.8)'

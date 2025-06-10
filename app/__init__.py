@@ -51,6 +51,32 @@ def index():
     sv_gv_ratio = round(total_students / total_teachers, 1) if total_teachers else 0
     # Lấy 5 sinh viên mới nhất theo id (nếu không có created_at/updated_at)
     latest_students = User.query.filter_by(role='student').order_by(User.updated_at.desc()).limit(5).all()
+    # Thống kê điểm số
+    score_ranges = {
+        'Dưới 5': 0,
+        '5-6.4': 0,
+        '6.5-7.9': 0,
+        '8-8.9': 0,
+        '9-10': 0
+    }
+    gender_stats = {'Nam': 0, 'Nữ': 0}
+    students = User.query.filter_by(role='student').all()
+    for s in students:
+        if s.score is not None:
+            if s.score < 5:
+                score_ranges['Dưới 5'] += 1
+            elif s.score < 6.5:
+                score_ranges['5-6.4'] += 1
+            elif s.score < 8:
+                score_ranges['6.5-7.9'] += 1
+            elif s.score < 9:
+                score_ranges['8-8.9'] += 1
+            else:
+                score_ranges['9-10'] += 1
+        if s.gender == 'Nam':
+            gender_stats['Nam'] += 1
+        elif s.gender == 'Nữ':
+            gender_stats['Nữ'] += 1
     return render_template(
         'index.html',
         total_students=total_students,
@@ -59,7 +85,9 @@ def index():
         assigned_classes=assigned_classes,
         total_teachers=total_teachers,
         sv_gv_ratio=sv_gv_ratio,
-        latest_students=latest_students
+        latest_students=latest_students,
+        score_ranges=score_ranges,
+        gender_stats=gender_stats
     )
 
 @login_manager.user_loader

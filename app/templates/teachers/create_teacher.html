@@ -27,22 +27,22 @@
                             <img src="{{ form.avatar.data or 'https://api.dicebear.com/7.x/adventurer/png?seed=teacher' }}" class="rounded-circle shadow mb-2" width="100" height="100" alt="Avatar">
                         </div>
                         <div class="mb-3">
-                            {{ form.teacher_code.label(class="form-label fw-bold") }}
+                            {{ form.teacher_code.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             {{ form.teacher_code(class="form-control" + (" is-invalid" if form.teacher_code.errors else ""), placeholder="Nhập mã giảng viên") }}
                             {% for error in form.teacher_code.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
-                            {{ form.fullname.label(class="form-label fw-bold") }}
+                            {{ form.fullname.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             {{ form.fullname(class="form-control" + (" is-invalid" if form.fullname.errors else ""), placeholder="Nhập họ và tên") }}
                             {% for error in form.fullname.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
-                            {{ form.username.label(class="form-label fw-bold") }}
+                            {{ form.username.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""), placeholder="Nhập tên đăng nhập") }}
                             {% for error in form.username.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3 position-relative">
-                            {{ form.password.label(class="form-label fw-bold") }}
+                            {{ form.password.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             <div class="input-group">
                                 {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), type="password", placeholder="Nhập mật khẩu", id="teacher-password") }}
                                 <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#teacher-password" tabindex="-1"><i class="fas fa-eye"></i></button>
@@ -50,7 +50,7 @@
                             {% for error in form.password.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3 position-relative">
-                            {{ form.confirm_password.label(class="form-label fw-bold") }}
+                            {{ form.confirm_password.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             <div class="input-group">
                                 {{ form.confirm_password(class="form-control" + (" is-invalid" if form.confirm_password.errors else ""), type="password", placeholder="Xác nhận mật khẩu", id="teacher-confirm-password") }}
                                 <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#teacher-confirm-password" tabindex="-1"><i class="fas fa-eye"></i></button>
@@ -74,12 +74,12 @@
                         });
                         </script>
                         <div class="mb-3">
-                            {{ form.email.label(class="form-label fw-bold") }}
+                            {{ form.email.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), placeholder="Nhập email") }}
                             {% for error in form.email.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
-                            {{ form.phone.label(class="form-label fw-bold") }}
+                            {{ form.phone.label(class="form-label fw-bold") }}<span class="text-danger ms-1">*</span>
                             {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else ""), placeholder="Nhập số điện thoại") }}
                             {% for error in form.phone.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
@@ -97,6 +97,11 @@
                             {{ form.avatar.label(class="form-label fw-bold") }}
                             {{ form.avatar(class="form-control" + (" is-invalid" if form.avatar.errors else ""), placeholder="Nhập URL ảnh đại diện") }}
                             {% for error in form.avatar.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.classes.label(class="form-label fw-bold") }}
+                            {{ form.classes(class="form-select", multiple=true) }}
+                            {% for error in form.classes.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{{ url_for('teachers.teacher_list') }}" class="btn btn-outline-secondary">

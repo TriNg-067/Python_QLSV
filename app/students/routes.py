@@ -177,6 +177,9 @@ def create_student():
         if User.query.filter_by(student_code=form.student_code.data).first():
             flash('Mã sinh viên này đã tồn tại. Vui lòng chọn mã khác.', 'danger')
             return render_template('students/create.html', form=form)
+        if User.query.filter_by(email=form.email.data).first():
+            flash('Email này đã tồn tại. Vui lòng chọn email khác.', 'danger')
+            return render_template('students/create.html', form=form)
         student = User(
             username=form.username.data,
             role='student',
