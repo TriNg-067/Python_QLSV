@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required
 from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from config import Config
@@ -31,6 +31,7 @@ app.register_blueprint(teachers_bp, url_prefix='/teachers')
 app.register_blueprint(classes_bp, url_prefix='/classes')
 
 @app.route('/')
+@login_required
 def index():
     from flask import render_template
     from flask_login import current_user

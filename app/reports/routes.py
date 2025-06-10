@@ -167,6 +167,7 @@ def export_pdf():
         elements.append(Paragraph("<br/>", styles['Normal']))
         
         font_name = 'DejaVuSans' if font_registered else 'Helvetica'
+        table = Table(data)
         style = TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),

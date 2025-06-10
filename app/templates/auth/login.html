@@ -25,9 +25,12 @@
                         {% endif %}
                     </div>
                     
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         {{ form.password.label(class="form-label") }}
-                        {{ form.password(class="form-control", placeholder="Nhập mật khẩu") }}
+                        <div class="input-group">
+                            {{ form.password(class="form-control", placeholder="Nhập mật khẩu", id="login-password") }}
+                            <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#login-password" tabindex="-1"><i class="fas fa-eye"></i></button>
+                        </div>
                         {% if form.password.errors %}
                             <div class="text-danger">
                                 {% for error in form.password.errors %}
@@ -36,6 +39,22 @@
                             </div>
                         {% endif %}
                     </div>
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelectorAll('.toggle-password').forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                const input = document.querySelector(this.getAttribute('data-target'));
+                                if (input.type === 'password') {
+                                    input.type = 'text';
+                                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                                } else {
+                                    input.type = 'password';
+                                    this.innerHTML = '<i class="fas fa-eye"></i>';
+                                }
+                            });
+                        });
+                    });
+                    </script>
                     
                     <div class="mb-3">
                         <div class="form-label mb-2">{{ form.role.label }}</div>

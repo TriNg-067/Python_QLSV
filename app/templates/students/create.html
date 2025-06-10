@@ -12,62 +12,90 @@
                 <div class="card-body p-4">
                     <form method="POST">
                         {{ form.csrf_token }}
+                        {% if form.errors %}
+                            <div class="alert alert-danger mb-3">
+                                <strong>Đã có lỗi, vui lòng kiểm tra lại các trường sau:</strong>
+                                <ul class="mb-0">
+                                    {% for field, errors in form.errors.items() %}
+                                        {% for error in errors %}
+                                            <li><strong>{{ form[field].label.text }}:</strong> {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
                         <div class="mb-3 text-center">
                             <img src="{{ form.avatar.data or 'https://api.dicebear.com/7.x/adventurer/png?seed=student' }}" class="rounded-circle shadow mb-2" width="100" height="100" alt="Avatar">
                         </div>
                         <div class="mb-3">
                             {{ form.username.label(class="form-label fw-bold") }}
-                            {{ form.username(class="form-control") }}
-                            {% for error in form.username.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                            {% for error in form.username.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             {{ form.password.label(class="form-label fw-bold") }}
-                            {{ form.password(class="form-control", type="password") }}
-                            {% for error in form.password.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            <div class="input-group">
+                                {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), type="password", id="student-password") }}
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#student-password" tabindex="-1"><i class="fas fa-eye"></i></button>
+                            </div>
+                            {% for error in form.password.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.toggle-password').forEach(function(btn) {
+                                btn.addEventListener('click', function() {
+                                    const input = document.querySelector(this.getAttribute('data-target'));
+                                    if (input.type === 'password') {
+                                        input.type = 'text';
+                                        this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                                    } else {
+                                        input.type = 'password';
+                                        this.innerHTML = '<i class="fas fa-eye"></i>';
+                                    }
+                                });
+                            });
+                        });
+                        </script>
                         <div class="mb-3">
                             {{ form.avatar.label(class="form-label fw-bold") }}
-                            {{ form.avatar(class="form-control", placeholder="Nhập URL ảnh đại diện") }}
-                            {% for error in form.avatar.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.avatar(class="form-control" + (" is-invalid" if form.avatar.errors else ""), placeholder="Nhập URL ảnh đại diện") }}
+                            {% for error in form.avatar.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.student_code.label(class="form-label fw-bold") }}
-                            {{ form.student_code(class="form-control") }}
-                            {% for error in form.student_code.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.student_code(class="form-control" + (" is-invalid" if form.student_code.errors else "")) }}
+                            {% for error in form.student_code.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.fullname.label(class="form-label fw-bold") }}
-                            {{ form.fullname(class="form-control") }}
-                            {% for error in form.fullname.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.fullname(class="form-control" + (" is-invalid" if form.fullname.errors else "")) }}
+                            {% for error in form.fullname.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.birthdate.label(class="form-label fw-bold") }}
-                            {{ form.birthdate(class="form-control", type="date") }}
-                            {% for error in form.birthdate.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.birthdate(class="form-control" + (" is-invalid" if form.birthdate.errors else ""), type="date") }}
+                            {% for error in form.birthdate.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.gender.label(class="form-label fw-bold") }}
-                            {{ form.gender(class="form-control") }}
-                            {% for error in form.gender.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.gender(class="form-control" + (" is-invalid" if form.gender.errors else "")) }}
+                            {% for error in form.gender.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.email.label(class="form-label fw-bold") }}
-                            {{ form.email(class="form-control", type="email") }}
-                            {% for error in form.email.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), type="email") }}
+                            {% for error in form.email.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.class_id.label(class="form-label fw-bold") }}
-                            {{ form.class_id(class="form-control") }}
-                            {% for error in form.class_id.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.class_id(class="form-control" + (" is-invalid" if form.class_id.errors else "")) }}
+                            {% for error in form.class_id.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
                             {{ form.score.label(class="form-label fw-bold") }}
-                            {{ form.score(class="form-control", type="number", step="0.1") }}
-                            {% for error in form.score.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                            {{ form.score(class="form-control" + (" is-invalid" if form.score.errors else ""), type="number", step="0.1") }}
+                            {% for error in form.score.errors %}<span class="invalid-feedback d-block">{{ error }}</span>{% endfor %}
                         </div>
-                        {% if form.errors %}
-                            <div class="alert alert-danger mb-3">Vui lòng kiểm tra lại các trường dữ liệu bị lỗi bên dưới.</div>
-                        {% endif %}
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{{ url_for('students.student_list') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>Quay lại

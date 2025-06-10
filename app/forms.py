@@ -34,9 +34,8 @@ class StudentForm(FlaskForm):
 
     def validate_student_code(self, student_code):
         student = User.query.filter_by(student_code=student_code.data).first()
-        if not student or (student and self.student_id and student.id == self.student_id):
-            return
-        raise ValidationError('Mã sinh viên này đã tồn tại. Vui lòng sử dụng mã khác.')
+        if student and (not hasattr(self, 'student_id') or student.id != self.student_id):
+            raise ValidationError('Mã sinh viên này đã tồn tại. Vui lòng sử dụng mã khác.')
 
 class ForgotPasswordForm(FlaskForm):
     email = StringField('Email hoặc tên đăng nhập', validators=[DataRequired()])
