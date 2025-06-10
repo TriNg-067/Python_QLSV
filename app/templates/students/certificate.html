@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Giấy chứng nhận{% endblock %}
+
+{% block content %}
+<style>
+  .certificate-container {
+    width: 800px;
+    height: 600px;
+    position: relative;
+    margin: 0 auto;
+  }
+  
+  .certificate-background {
+    width: 100%;
+    height: 100%;
+    background-image: url('{{ url_for("static", filename="img/certificates/Certificate.png") }}');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  
+  .certificate-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .certificate-title {
+    text-align: center;
+    margin-top: 100px;
+    font-size: 45px;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .certificate-subtitle {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 15px;
+    color: #000;
+  }
+  
+  .recipient-name {
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Arial', 'DejaVu Sans', sans-serif;
+    color: #1A237E;
+    margin-top: 1px;
+    text-align: center;
+  }
+  
+  .certificate-message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 18px;
+    color: #000;
+    line-height: 1.8;
+  }
+  
+  .certificate-signatures {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 50px;
+  }
+  
+  .signature-block {
+    text-align: center;
+    width: 200px;
+  }
+  
+  .signature-line {
+    width: 100%;
+    border-top: 1px solid #000;
+    margin-bottom: 10px;
+  }
+  
+  .signature-title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  @media print {
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .certificate-container {
+      width: 100%;
+      height: 100vh;
+    }
+  }
+</style>
+
+<div class="certificate-container mt-4 mb-4">
+  <div class="certificate-background">
+    <div class="certificate-content">
+      <div class="certificate-title">GIẤY CHỨNG NHẬN</div>
+      <div class="certificate-subtitle">Được trao cho</div>
+      <div class="recipient-name">{{ student.fullname }}</div>
+      
+      <div class="certificate-message">
+        Đã đạt thành tích xuất sắc với điểm số {{ '%.1f'|format(student.score) }}<br>
+        Lớp: {{ student.class_.name if student.class_ else 'Chưa phân lớp' }} - Mã sinh viên: {{ student.student_code }}
+      </div>
+      
+      <div class="certificate-signatures">
+        <div class="signature-block">
+          <div class="signature-line"></div>
+          <div style="font-size:15px;font-weight:bold;">TRẦN THỊ NGA</div>
+          <div class="signature-title" style="font-weight:normal;">Trưởng ban đào tạo</div>
+        </div>
+        <div class="signature-block">
+          <div class="signature-line"></div>
+          <div style="font-size:15px;font-weight:bold;">NGUYỄN PHÚC TRÍ</div>
+          <div class="signature-title" style="font-weight:normal;">Hiệu trưởng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-flex justify-content-center mb-4 gap-3">
+  <a href="{{ url_for('students.student_list') }}" class="btn btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
+  </a>
+</div>
+{% endblock %} 

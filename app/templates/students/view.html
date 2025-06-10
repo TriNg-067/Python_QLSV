@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Chi tiết Sinh viên{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h6 class="mb-0" style="font-size:1.1rem;"><i class="fas fa-user me-2" style="font-size:1.1rem;"></i>Thông tin Sinh viên</h6>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3 justify-content-center">
+                <div class="col-md-3 text-center">
+                    <img src="{{ student.avatar or 'https://api.dicebear.com/7.x/adventurer/png?seed=student' }}" class="rounded-circle shadow mb-3" width="120" height="120" alt="Avatar">
+                    <h5 class="fw-bold mt-2">{{ student.fullname }}</h5>
+                </div>
+                <div class="col-md-5">
+                    <div class="mb-2"><strong>Mã sinh viên:</strong> {{ student.student_code }}</div>
+                    <div class="mb-2"><strong>Ngày sinh:</strong> {% if student.birthdate %}{{ student.birthdate.strftime('%d/%m/%Y') }}{% else %}Chưa cập nhật{% endif %}</div>
+                    <div class="mb-2"><strong>Giới tính:</strong> {{ student.gender or 'Chưa cập nhật' }}</div>
+                    <div class="mb-2"><strong>Email:</strong> {{ student.email or 'Chưa cập nhật' }}</div>
+                    <div class="mb-2"><strong>Lớp:</strong> {{ student.class_.name if student.class_ else 'Chưa phân lớp' }}</div>
+                    <div class="mb-2"><strong>Điểm số:</strong> {% if student.score is not none %}{{ '%.1f'|format(student.score) }}{% else %}Chưa cập nhật{% endif %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('students.student_list') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                </a>
+                <div class="d-flex gap-2">
+                    {% if current_user.role != 'student' %}
+                    <a href="{{ url_for('students.edit_student', id=student.id) }}" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Sửa thông tin
+                    </a>
+                    {% endif %}
+                    {% if student.score is not none and student.score >= 8.0 and (current_user.role == 'admin' or current_user.role == 'teacher' and (student.class_ and current_user.can_manage_class(student.class_.name)) or (current_user.role == 'student' and current_user.id == student.id)) %}
+                    <a href="{{ url_for('students.student_certificate', id=student.id) }}" class="btn btn-outline-success">
+                        <i class="fas fa-award me-1"></i> Xem chứng nhận
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

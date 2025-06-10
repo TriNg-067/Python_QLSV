@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% block title %}Danh sách giảng viên{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+.student-link {
+    color: #0d6efd;
+    font-weight: 600;
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+}
+.student-link:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Thông tin giảng viên</h5>
+                    {% if is_admin %}
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('reports.export_excel_teachers', search=request.args.get('search', '')) }}" class="btn btn-light btn-sm text-success">
+                            <i class="fas fa-file-excel me-1"></i> <strong>Xuất Excel</strong>
+                        </a>
+                        <a href="{{ url_for('reports.export_pdf_teachers', search=request.args.get('search', '')) }}" class="btn btn-light btn-sm text-danger">
+                            <i class="fas fa-file-pdf me-1"></i> <strong>Xuất PDF</strong>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+    <div class="row mb-4">
+        <!-- Bạn có thể thêm các card thống kê khác ở đây nếu muốn -->
+    </div>
+                    {% if is_admin %}
+                    <form method="GET" class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm theo mã hoặc họ tên" value="{{ request.args.get('search', '') }}">
+                                    <button class="btn btn-primary"><i class="fas fa-search me-1"></i>Tìm kiếm</button>
+                                    <a href="{{ url_for('teachers.create_teacher') }}" class="btn btn-warning ms-2" style="min-width:90px">
+                                        <i class="fas fa-plus-circle me-1"></i>Thêm mới
+                                    </a>
+                                    <a href="#" id="editSelectedBtn" class="btn btn-primary ms-2" style="min-width:90px" disabled><i class="fas fa-edit me-1"></i>Sửa</a>
+                                    <button type="button" class="btn btn-danger ms-2" id="deleteSelectedBtn" disabled><i class="fas fa-trash-alt me-1"></i>Xoá</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                    {% if teachers and not is_admin %}
+                        <div class="row mb-3 justify-content-center">
+                            <div class="col-md-3 text-center">
+                                <img src="{{ teachers[0].avatar or 'https://api.dicebear.com/7.x/adventurer/png?seed=teacher' }}" class="rounded-circle shadow mb-3" width="120" height="120" alt="Avatar">
+                                <h4 class="fw-bold mt-2">{{ teachers[0].fullname or teachers[0].username }}</h4>
+                                <a href="{{ url_for('teachers.edit_profile') }}" class="btn btn-primary btn-sm mt-2"><i class="fas fa-edit me-1"></i>Chỉnh sửa thông tin</a>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="mb-2"><strong>Số điện thoại:</strong> {{ teachers[0].phone or 'Chưa cập nhật' }}</div>
+                                <div class="mb-2"><strong>Ngày sinh:</strong> {{ teachers[0].birthdate.strftime('%d/%m/%Y') if teachers[0].birthdate else 'Chưa cập nhật' }}</div>
+                                <div class="mb-2"><strong>Giới tính:</strong> {{ teachers[0].gender or 'Chưa cập nhật' }}</div>
+                                <div class="mb-2"><strong>Các lớp phụ trách:</strong>
+                                    {% if teachers[0].classes %}
+                                        <ul class="mb-0 ps-3">
+                                        {% for c in teachers[0].classes %}
+                                            <li>{{ c.name }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <span>Chưa có lớp phụ trách</span>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                    {% elif teachers and is_admin %}
+                        <form id="deleteForm" action="{{ url_for('teachers.delete_teachers') }}" method="POST" class="mb-3">
+                            <input type="hidden" name="teacher_ids" id="selectedTeacherIds">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered align-middle table-teachers">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th width="40px" class="text-center"><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                                            <th class="text-center col-avatar" style="width:60px;">Avatar</th>
+                                            <th class="text-center col-teacher-code">Mã GV
+                                                <a href="?search={{ request.args.get('search', '') }}&sort_by=teacher_code&sort_order={% if sort_by == 'teacher_code' and sort_order == 'asc' %}desc{% else %}asc{% endif %}" class="ms-1 text-secondary align-middle" style="font-size:1rem">
+                                                    {% if sort_by == 'teacher_code' and sort_order == 'asc' %}
+                                                        <i class="fas fa-sort-up text-primary"></i>
+                                                    {% elif sort_by == 'teacher_code' and sort_order == 'desc' %}
+                                                        <i class="fas fa-sort-down text-primary"></i>
+                                                    {% else %}
+                                                        <i class="fas fa-sort"></i>
+                                                    {% endif %}
+                                                </a>
+                                            </th>
+                                            <th class="text-start col-fullname">Họ và tên
+                                                <a href="?search={{ request.args.get('search', '') }}&sort_by=fullname&sort_order={% if sort_by == 'fullname' and sort_order == 'asc' %}desc{% else %}asc{% endif %}" class="ms-1 text-secondary align-middle" style="font-size:1rem">
+                                                    {% if sort_by == 'fullname' and sort_order == 'asc' %}
+                                                        <i class="fas fa-sort-up text-primary"></i>
+                                                    {% elif sort_by == 'fullname' and sort_order == 'desc' %}
+                                                        <i class="fas fa-sort-down text-primary"></i>
+                                                    {% else %}
+                                                        <i class="fas fa-sort"></i>
+                                                    {% endif %}
+                                                </a>
+                                            </th>
+                                            <th class="text-start col-username">Tên đăng nhập</th>
+                                            <th class="text-start col-email">Email</th>
+                                            <th class="text-center col-phone">SĐT</th>
+                                            <th class="text-center col-birthdate">Ngày sinh</th>
+                                            <th class="text-center col-gender">Giới tính</th>
+                                            <th class="text-center col-classes">Các lớp phụ trách</th>
+                                            <th class="text-center col-class-count">Số lớp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for teacher in teachers %}
+                                        <tr>
+                                            <td class="text-center"><input type="checkbox" class="form-check-input teacher-checkbox" value="{{ teacher.id }}"></td>
+                                            <td class="text-center col-avatar">
+                                                <img src="{{ teacher.avatar or 'https://api.dicebear.com/7.x/adventurer/png?seed=teacher' }}" class="rounded-circle" width="40" height="40" alt="Avatar">
+                                            </td>
+                                            <td class="text-center col-teacher-code"><a href="{{ url_for('teachers.edit_teacher', id=teacher.id) }}" class="student-link">{{ teacher.teacher_code }}</a></td>
+                                            <td class="text-start col-fullname"><a href="{{ url_for('teachers.edit_teacher', id=teacher.id) }}" class="student-link">{{ teacher.fullname }}</a></td>
+                                            <td class="text-start col-username">{{ teacher.username }}</td>
+                                            <td class="text-start col-email">{{ teacher.email or '' }}</td>
+                                            <td class="text-center col-phone">{{ teacher.phone or '' }}</td>
+                                            <td class="text-center col-birthdate">{{ teacher.birthdate.strftime('%d/%m/%Y') if teacher.birthdate else '' }}</td>
+                                            <td class="text-center col-gender">{{ teacher.gender or '' }}</td>
+                                            <td class="text-center col-classes">
+                                                {% for c in teacher.classes %}{{ c.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+                                            </td>
+                                            <td class="text-center col-class-count">
+                                                {{ teacher.classes|length }}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-info text-center my-4">
+                            <i class="fas fa-info-circle me-2"></i>Không có giảng viên nào
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_admin and total_pages > 1 %}
+<nav aria-label="Phân trang giảng viên">
+  <ul class="pagination justify-content-center mt-4">
+    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+      <a class="page-link" href="?search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}&page={{ page-1 }}" tabindex="-1">&laquo;</a>
+    </li>
+    {% for p in range(1, total_pages+1) %}
+    <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="?search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}&page={{ p }}">{{ p }}</a></li>
+    {% endfor %}
+    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+      <a class="page-link" href="?search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}&page={{ page+1 }}">&raquo;</a>
+    </li>
+  </ul>
+</nav>
+{% endif %}
+
+<!-- Modal xác nhận xóa nhiều -->
+<div class="modal fade" id="deleteSelectedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Xác nhận xóa nhiều</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa <strong id="deleteCount"></strong> giảng viên đã chọn?</p>
+                <p class="text-danger"><small>Lưu ý: Hành động này không thể khôi phục.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteSelected">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý checkbox chọn tất cả
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const teacherCheckboxes = document.querySelectorAll('.teacher-checkbox');
+    const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+    const editSelectedBtn = document.getElementById('editSelectedBtn');
+    // Modal và các biến liên quan
+    const deleteCountElem = document.getElementById('deleteCount');
+    const selectedTeacherIds = document.getElementById('selectedTeacherIds');
+    const deleteForm = document.getElementById('deleteForm');
+    const confirmDeleteSelected = document.getElementById('confirmDeleteSelected');
+    // Cập nhật số lượng đã chọn
+    function updateSelectedCount() {
+        if (!teacherCheckboxes.length) return;
+        const checked = Array.from(teacherCheckboxes).filter(cb => cb.checked);
+        if (deleteSelectedBtn) deleteSelectedBtn.disabled = checked.length === 0;
+        if (editSelectedBtn) editSelectedBtn.disabled = checked.length !== 1;
+    }
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+            teacherCheckboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            updateSelectedCount();
+        });
+    }
+    teacherCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+    // Xử lý nút Sửa
+    if (editSelectedBtn) {
+        editSelectedBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checked = Array.from(teacherCheckboxes).filter(cb => cb.checked);
+            if (checked.length === 1) {
+                const teacherId = checked[0].value;
+                window.location.href = `/teachers/${teacherId}/edit`;
+            } else {
+                alert('Vui lòng chọn đúng 1 giảng viên để sửa!');
+            }
+        });
+    }
+    // Xử lý nút Xoá nhiều
+    if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener('click', function() {
+            const selectedIds = Array.from(teacherCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            if(selectedIds.length === 0) return;
+            if(deleteCountElem) deleteCountElem.textContent = selectedIds.length;
+            if(selectedTeacherIds) selectedTeacherIds.value = selectedIds.join(',');
+            const deleteSelectedModal = new bootstrap.Modal(document.getElementById('deleteSelectedModal'));
+            deleteSelectedModal.show();
+        });
+    }
+    // Xác nhận xoá nhiều
+    if (confirmDeleteSelected) {
+        confirmDeleteSelected.addEventListener('click', function() {
+            if(deleteForm) deleteForm.submit();
+        });
+    }
+    // Khởi tạo trạng thái ban đầu
+    updateSelectedCount();
+});
+</script>
+{% endblock %} 

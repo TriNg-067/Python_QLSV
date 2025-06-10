@@ -1,0 +1,277 @@
+:root {
+  --primary-color: #2563eb;
+  --hover-color: #1d4ed8;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card {
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+  h3.text-start.mb-0, h4.mb-0.text-start {
+    font-size: 1rem !important;
+  }
+  .btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.custom-container {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Breakpoints chuẩn của Bootstrap 5 */
+@media (min-width: 576px) {
+  .custom-container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .custom-container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .custom-container {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .custom-container {
+    max-width: 1320px;
+  }
+}
+
+/* --- CSS từ base.html --- */
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s;
+    margin: 0 3px;
+}
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.navbar-nav .nav-link i {
+    margin-right: 5px;
+}
+.navbar-nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    position: relative;
+}
+.navbar-nav .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    margin-right: 10px;
+}
+.user-info .user-avatar {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+.logout-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s;
+}
+.logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+body {
+    overflow-x: hidden;
+}
+.navbar {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.nav-link.dashboard {
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.logo-icon {
+    font-size: 1.5rem;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-right: 1rem;
+}
+
+/* --- CSS từ index.html --- */
+
+/* Smaller login & forgot password headings */
+h3.text-start.mb-0, h4.mb-0.text-start {
+    font-size: 1.2rem !important;
+}
+
+/* Center the role selection group */
+.d-flex.gap-3 {
+    justify-content: center !important;
+}
+.stat-card {
+    transition: transform 0.3s;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.dashboard-header {
+    background: linear-gradient(135deg, #3a8eba, #46a6f7);
+    padding: 2rem;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 2rem;
+}
+.dashboard-title {
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 0.8rem;
+}
+.info-box {
+    background-color: #f8f9fa;
+    border-left: 4px solid #0d6efd;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+}
+.chart-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.data-card {
+    transition: all 0.3s;
+    height: 100%;
+}
+.data-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.card-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+}
+.table-container {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.progress {
+    height: 8px;
+}
+
+/* ==== Table column alignment & width for students/teachers ==== */
+.table-students th, .table-students td,
+.table-teachers th, .table-teachers td {
+  vertical-align: middle;
+  white-space: nowrap;
+  padding: 0.75rem 0.5rem;
+  line-height: 1.5;
+}
+.table-students th.text-start, .table-students td.text-start,
+.table-teachers th.text-start, .table-teachers td.text-start {
+  text-align: left !important;
+}
+.table-students th.text-center, .table-students td.text-center,
+.table-teachers th.text-center, .table-teachers td.text-center {
+  text-align: center !important;
+}
+/* Students table column width */
+.table-students th.col-student-code, .table-students td.col-student-code { width: 90px; }
+.table-students th.col-fullname, .table-students td.col-fullname { width: 180px; }
+.table-students th.col-birthdate, .table-students td.col-birthdate { width: 110px; }
+.table-students th.col-gender, .table-students td.col-gender { width: 80px; }
+.table-students th.col-class, .table-students td.col-class { width: 100px; }
+.table-students th.col-email, .table-students td.col-email { width: 200px; }
+.table-students th.col-score, .table-students td.col-score { width: 70px; }
+
+/* Teachers table column width */
+.table-teachers th.col-teacher-code, .table-teachers td.col-teacher-code { width: 90px; }
+.table-teachers th.col-fullname, .table-teachers td.col-fullname { width: 160px; }
+.table-teachers th.col-username, .table-teachers td.col-username { width: 120px; }
+.table-teachers th.col-email, .table-teachers td.col-email { width: 200px; }
+.table-teachers th.col-phone, .table-teachers td.col-phone { width: 110px; }
+.table-teachers th.col-birthdate, .table-teachers td.col-birthdate { width: 110px; }
+.table-teachers th.col-gender, .table-teachers td.col-gender { width: 80px; }
+.table-teachers th.col-classes, .table-teachers td.col-classes { width: 160px; }

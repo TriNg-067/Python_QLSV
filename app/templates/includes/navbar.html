@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('student_list') }}">Quản Lý Sinh Viên</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Đã chuyển mục Lớp học sang base.html, không cần mục này ở đây nữa -->
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item me-3">
+                    <span class="badge bg-light text-primary me-2">
+                        {% if current_user.role == 'admin' %}
+                            Quản trị viên
+                        {% elif current_user.role == 'teacher' %}
+                            Giảng viên
+                        {% else %}
+                            Sinh viên
+                        {% endif %}
+                    </span>
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('auth.logout') }}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Đăng xuất
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">
+                        <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

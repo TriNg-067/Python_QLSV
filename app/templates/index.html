@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+{% block title %}Trang chủ{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header text-center shadow">
+    <h1 class="dashboard-title">Phần mềm quản lý sinh viên</h1>
+    <p class="lead">
+        Hệ thống quản lý thông tin sinh viên, giảng viên và lớp học hiện đại
+        được phát triển để đáp ứng nhu cầu quản lý giáo dục một cách hiệu quả.
+    </p>
+</div>
+
+<h3 class="mt-4 mb-3"><i class="fas fa-tachometer-alt me-2"></i> Tổng quan</h3>
+
+<!-- Thống kê số lượng -->
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card stat-card shadow-sm h-100 data-card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Tổng số sinh viên</h6>
+                        <h2 class="display-5 mb-0 fw-bold">{{ total_students }}</h2>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="progress bg-light opacity-50">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 75%"></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card stat-card shadow-sm h-100 data-card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Sinh viên đạt giỏi</h6>
+                        <h2 class="display-5 mb-0 fw-bold">{{ excellent_students }}</h2>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="progress bg-light opacity-50">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 28%"></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card stat-card shadow-sm h-100 data-card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Lớp học</h6>
+                        <h2 class="display-5 mb-0 fw-bold">{{ total_classes }}</h2>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-chalkboard"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="progress bg-light opacity-50">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 90%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card stat-card shadow-sm h-100 data-card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Giảng viên</h6>
+                        <h2 class="display-5 mb-0 fw-bold">{{ total_teachers }}</h2>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="progress bg-light opacity-50">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Biểu đồ -->
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="chart-container shadow-sm">
+            <h5 class="card-title mb-3"><i class="fas fa-chart-bar me-2"></i>Thống kê sinh viên theo điểm số</h5>
+            <canvas id="gradeDistributionChart" height="200"></canvas>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="chart-container shadow-sm">
+            <h5 class="card-title mb-3"><i class="fas fa-chart-pie me-2"></i>Phân bố theo giới tính</h5>
+            <canvas id="genderChart" height="250"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bảng danh sách sinh viên mới nhất -->
+<div class="row mt-2">
+    <div class="col-md-12">
+        <div class="card shadow-sm table-container">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-list me-2"></i>Danh sách sinh viên mới cập nhật</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã SV</th>
+                                <th>Họ tên</th>
+                                <th>Lớp</th>
+                                <th>Điểm TB</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sv in latest_students %}
+                            <tr>
+                                <td>{{ sv.student_code }}</td>
+                                <td>{{ sv.fullname }}</td>
+                                <td>{{ sv.class_.name if sv.class_ else '' }}</td>
+                                <td>{{ sv.score if sv.score is not none else '' }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('students.view_student', id=sv.id) }}">Xem</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <a href="{{ url_for('students.student_list') }}" class="btn btn-primary">Xem tất cả sinh viên</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Biểu đồ phân bố điểm số
+    const gradeCtx = document.getElementById('gradeDistributionChart').getContext('2d');
+    const gradeChart = new Chart(gradeCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Dưới 5', '5-6.4', '6.5-7.9', '8-8.9', '9-10'],
+            datasets: [{
+                label: 'Số lượng sinh viên',
+                data: [45, 120, 350, 280, 229],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                    'rgba(255, 205, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(54, 162, 235, 0.7)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Biểu đồ phân bố giới tính
+    const genderCtx = document.getElementById('genderChart').getContext('2d');
+    const genderChart = new Chart(genderCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Nam', 'Nữ'],
+            datasets: [{
+                label: 'Giới tính',
+                data: [580, 444],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 99, 132, 0.8)'
+                ],
+                borderColor: [
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)'
+                ],
+                borderWidth: 1,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+
+    // Biểu đồ điểm trung bình theo lớp
+    const classCtx = document.getElementById('classAvgChart').getContext('2d');
+    const classChart = new Chart(classCtx, {
+        type: 'line',
+        data: {
+            labels: ['K12', 'K13', 'K14', 'K15', 'K16'],
+            datasets: [{
+                label: 'Điểm trung bình',
+                data: [7.2, 7.5, 7.8, 8.1, 7.9],
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    min: 5,
+                    max: 10
+                }
+            }
+        }
+    });
+
+    // Biểu đồ tiến độ hoàn thành học phần
+    const completionCtx = document.getElementById('completionChart').getContext('2d');
+    const completionChart = new Chart(completionCtx, {
+        type: 'bar',
+        data: {
+            labels: ['K12', 'K13', 'K14', 'K15', 'K16'],
+            datasets: [{
+                label: 'Đã hoàn thành',
+                data: [100, 95, 80, 45, 20],
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1
+            }, {
+                label: 'Đang học',
+                data: [0, 5, 20, 55, 80],
+                backgroundColor: 'rgba(255, 205, 86, 0.7)',
+                borderColor: 'rgb(255, 205, 86)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

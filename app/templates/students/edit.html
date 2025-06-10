@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Chỉnh sửa thông tin sinh viên{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0" style="font-size:1.1rem;"><i class="fas fa-user-edit me-2" style="font-size:1.1rem;"></i>Chỉnh sửa thông tin sinh viên</h6>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('students.edit_student', id=student.id) }}">
+                        {{ form.csrf_token }}
+                        <div class="mb-3 text-center">
+                            <img src="{{ student.avatar or 'https://api.dicebear.com/7.x/adventurer/png?seed=student' }}" class="rounded-circle shadow mb-2" width="100" height="100" alt="Avatar">
+                        </div>
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label fw-bold") }}
+                            {{ form.username(class="form-control") }}
+                            {% for error in form.username.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label fw-bold") }}
+                            {{ form.password(class="form-control", type="password") }}
+                            {% for error in form.password.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.student_code.label(class="form-label fw-bold") }}
+                            {{ form.student_code(class="form-control", placeholder="Nhập mã sinh viên") }}
+                            {% for error in form.student_code.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.fullname.label(class="form-label fw-bold") }}
+                            {{ form.fullname(class="form-control", placeholder="Nhập họ và tên") }}
+                            {% for error in form.fullname.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.birthdate.label(class="form-label fw-bold") }}
+                            {{ form.birthdate(class="form-control", type="date") }}
+                            {% for error in form.birthdate.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.gender.label(class="form-label fw-bold") }}
+                            {{ form.gender(class="form-select") }}
+                            {% for error in form.gender.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label fw-bold") }}
+                            {{ form.email(class="form-control", type="email", placeholder="Nhập email") }}
+                            {% for error in form.email.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.class_id.label(class="form-label fw-bold") }}
+                            {{ form.class_id(class="form-select") }}
+                            {% for error in form.class_id.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.score.label(class="form-label fw-bold") }}
+                            {{ form.score(class="form-control", type="number", step="0.1", placeholder="Nhập điểm") }}
+                            {% for error in form.score.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.avatar.label(class="form-label fw-bold") }}
+                            {{ form.avatar(class="form-control", placeholder="Nhập URL ảnh đại diện") }}
+                            {% for error in form.avatar.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+                        </div>
+                        {% if form.errors %}
+                            <div class="alert alert-danger mb-3">Vui lòng kiểm tra lại các trường dữ liệu bị lỗi bên dưới.</div>
+                        {% endif %}
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{{ url_for('students.student_list') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-save me-2"></i>Lưu thay đổi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Phần mềm quản lý sinh viên{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container d-flex align-items-center justify-content-between">
+            <span class="navbar-brand mb-0 d-flex align-items-center">
+                <i class="fas fa-graduation-cap logo-icon"></i> Phần mềm quản lý sinh viên
+            </span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'student' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path.startswith('/students') %}active{% endif %}" href="{{ url_for('students.student_list') }}">
+                                <i class="fas fa-user-graduate"></i> Sinh viên
+                            </a>
+                        </li>
+                    {% else %}
+                        {% if current_user.is_authenticated and current_user.role != 'teacher' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('index') }}">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path.startswith('/students') %}active{% endif %}" href="{{ url_for('students.student_list') }}">
+                                <i class="fas fa-user-graduate"></i> Sinh viên
+                            </a>
+                        </li>
+                        {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path.startswith('/teachers') %}active{% endif %}" href="{{ url_for('teachers.teacher_list') }}">
+                                <i class="fas fa-chalkboard-teacher"></i> Giảng viên
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path.startswith('/classes') %}active{% endif %}" href="{{ url_for('classes.class_list') }}">
+                                <i class="fas fa-chalkboard"></i> Lớp học
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar overflow-hidden me-2">
+                                {% if current_user.avatar %}
+                                    <img src="{{ current_user.avatar }}" alt="avatar" style="width:32px;height:32px;object-fit:cover;border-radius:50%;">
+                                {% else %}
+                                    <i class="fas fa-user fa-lg"></i>
+                                {% endif %}
+                            </div>
+                            <span>{{ current_user.username }} <small class="badge bg-light text-dark">{{ current_user.role }}</small></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}"><i class="fas fa-key me-2"></i>Đổi mật khẩu</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="custom-container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show auto-dismiss">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Tự động đóng thông báo sau 3 giây
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert.auto-dismiss');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    const closeButton = alert.querySelector('.btn-close');
+                    if (closeButton) {
+                        closeButton.click();
+                    } else {
+                        alert.classList.remove('show');
+                        setTimeout(function() {
+                            alert.remove();
+                        }, 150);
+                    }
+                }, 3000);
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
