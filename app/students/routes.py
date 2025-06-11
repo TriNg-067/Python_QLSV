@@ -130,7 +130,7 @@ def student_list():
     sort_by = request.args.get('sort_by', 'student_code')
     sort_order = request.args.get('sort_order', 'asc')
     page = int(request.args.get('page', 1))
-    per_page = 20
+    per_page = 15
     students = get_filterable_students(search)
     if sort_by == 'student_code':
         students = sorted(students, key=lambda x: x.student_code, reverse=(sort_order == 'desc'))

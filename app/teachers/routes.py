@@ -15,7 +15,7 @@ def teacher_list():
     sort_by = request.args.get('sort_by', 'teacher_code')
     sort_order = request.args.get('sort_order', 'asc')
     page = int(request.args.get('page', 1))
-    per_page = 20
+    per_page = 15
     if current_user.role == 'admin':
         query = User.query.filter_by(role='teacher')
         if search:

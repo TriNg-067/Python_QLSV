@@ -1,6 +1,34 @@
 :root {
-  --primary-color: #2563eb;
+  --primary-color: #1e4db7;
   --hover-color: #1d4ed8;
+  --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --bs-font-cabin: Cabin, sans-serif;
+}
+.f--primary{
+  color: var(--primary-color);
+}
+#bg--primary{
+  background-color: var(--primary-color);
+}
+
+.title-login{
+font-family: var(--bs-font-monospace);
+padding-top: 10px;
+}
+.scroll-top {
+  position: fixed; 
+  right: 20px; 
+  bottom: 20px; 
+  background-color: #1e4db7;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  display: none; 
 }
 
 .form-control:focus {
@@ -24,6 +52,7 @@
 }
 
 .card {
+  
   border-radius: 12px;
   transition: transform 0.2s ease;
 }

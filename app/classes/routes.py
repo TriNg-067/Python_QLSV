@@ -19,6 +19,11 @@ def class_list():
 def create_class():
     form = ClassForm()
     if form.validate_on_submit():
+        # Kiểm tra xem lớp đã tồn tại chưa
+        existing_class = Class.query.filter_by(name=form.name.data).first()
+        if existing_class:
+            flash('Mã lớp đã tồn tại! Vui lòng nhập mã lớp khác.', 'danger')
+            return render_template('classes/create_edit.html', form=form, action='create')
         new_class = Class(name=form.name.data)
         db.session.add(new_class)
         db.session.commit()
@@ -33,6 +38,11 @@ def edit_class(id):
     class_obj = Class.query.get_or_404(id)
     form = ClassForm(obj=class_obj)
     if form.validate_on_submit():
+           # Kiểm tra xem lớp đã tồn tại chưa, loại trừ lớp hiện tại
+        existing_class = Class.query.filter(Class.name == form.name.data, Class.id != id).first()
+        if existing_class:
+            flash('Mã lớp đã tồn tại! Vui lòng nhập mã lớp khác.', 'danger')
+            return render_template('classes/create_edit.html', form=form, action='edit')
         class_obj.name = form.name.data
         db.session.commit()
         flash('Đã cập nhật tên lớp!', 'success')

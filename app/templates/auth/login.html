@@ -3,11 +3,12 @@
 {% block title %}Đăng nhập{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center " style="margin-top: 60px;">
     <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-start"><i class="fas fa-sign-in-alt me-2"></i>Đăng nhập</h4>
+        <div class="card shadow" style="padding: 15px;">
+            <div class="text-nowrap logo-img text-center d-block pt-3 w-100" style="text-align: center;">
+                 <img src="../../static/img/certificates/logo.png" alt="" style="max-width: 35%; height: auto;">
+                 <div class= "text-center title-login ">Đăng nhập để sử dụng ứng dụng</div>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ url_for('auth.login') }}">
