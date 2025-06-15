@@ -170,7 +170,10 @@
 <script>
     // Lấy data động từ backend
     const gradeData = JSON.parse('{{ (score_ranges.values()|list)|tojson|safe }}');
-    const genderData = JSON.parse('{{ (gender_stats.values()|list)|tojson|safe }}');
+    // Lấy labels và data động cho biểu đồ giới tính
+    const genderStats = JSON.parse('{{ gender_stats|tojson|safe }}');
+    const genderLabels = ['Nam', 'Nữ', 'Khác'];
+    const genderData = genderLabels.map(label => genderStats[label] || 0);
     // Biểu đồ phân bố điểm số
     const gradeCtx = document.getElementById('gradeDistributionChart').getContext('2d');
     const gradeChart = new Chart(gradeCtx, {
@@ -214,17 +217,19 @@
     const genderChart = new Chart(genderCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Nam', 'Nữ'],
+            labels: genderLabels,
             datasets: [{
                 label: 'Giới tính',
                 data: genderData,
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(255, 99, 132, 0.8)'
+                    'rgba(54, 162, 235, 0.8)',  // Nam
+                    'rgba(255, 99, 132, 0.8)',  // Nữ
+                    'rgba(255, 205, 86, 0.8)'   // Khác
                 ],
                 borderColor: [
                     'rgb(54, 162, 235)',
-                    'rgb(255, 99, 132)'
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 205, 86)'
                 ],
                 borderWidth: 1,
                 hoverOffset: 4

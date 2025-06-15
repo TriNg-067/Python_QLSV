@@ -59,7 +59,7 @@ def index():
         '8-8.9': 0,
         '9-10': 0
     }
-    gender_stats = {'Nam': 0, 'Nữ': 0}
+    gender_stats = {'Nam': 0, 'Nữ': 0, 'Khác': 0}
     students = User.query.filter_by(role='student').all()
     for s in students:
         if s.score is not None:
@@ -77,6 +77,8 @@ def index():
             gender_stats['Nam'] += 1
         elif s.gender == 'Nữ':
             gender_stats['Nữ'] += 1
+        else:
+            gender_stats['Khác'] += 1
     return render_template(
         'index.html',
         total_students=total_students,

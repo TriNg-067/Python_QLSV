@@ -61,6 +61,10 @@ padding-top: 10px;
   transform: translateY(-2px);
 }
 
+.footer {
+    margin-top: 64px !important;
+}
+
 @media (max-width: 768px) {
   .navbar-brand {
     font-size: 1.1rem;

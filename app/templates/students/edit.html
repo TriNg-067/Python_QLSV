@@ -20,9 +20,12 @@
                             {{ form.username(class="form-control") }}
                             {% for error in form.username.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             {{ form.password.label(class="form-label fw-bold") }}
-                            {{ form.password(class="form-control", type="password") }}
+                            <div class="input-group">
+                                {{ form.password(class="form-control", type="password", id="edit-student-password") }}
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#edit-student-password" tabindex="-1"><i class="fas fa-eye"></i></button>
+                            </div>
                             {% for error in form.password.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
                         </div>
                         <div class="mb-3">
