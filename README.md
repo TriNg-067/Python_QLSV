@@ -167,5 +167,4 @@ QLSV-Python/
 
 
 ## Liên hệ
-- Đọc các file RULE.md trong từng module để hiểu quy tắc nghiệp vụ.
 - Nếu có vấn đề, liên hệ qua email (tri.np0607@gmail.com). 
