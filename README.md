@@ -6,7 +6,7 @@
 ---
 
 ## Hình ảnh Demo
-![]("https://drive.google.com/file/d/1kLPUiJqUATIFl0-5G9eRp4JPlKA01qa-/view?usp=sharing")
+![](https://drive.google.com/file/d/1kLPUiJqUATIFl0-5G9eRp4JPlKA01qa-/view?usp=sharing)
 [Xem thêm tại đây](https://drive.google.com/drive/folders/1nHXQ1bWaEwojZP1lxT9QQT4jBCYwNH0h?usp=drive_link)
 ---
 
