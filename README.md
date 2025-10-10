@@ -1,4 +1,4 @@
-# QLSV-Python
+![Giaodien_Dashboard](https://github.com/user-attachments/assets/f20a2345-9f85-4853-9aff-3b10199c25e0)# QLSV-Python
 
 ## Mục đích
 Ứng dụng quản lý sinh viên, giáo viên, lớp học, báo cáo, xuất file PDF/Excel, xác thực, gửi mail, v.v.
@@ -6,7 +6,8 @@
 ---
 
 ## Hình ảnh Demo
-![Giao diện tổng quan](https://drive.google.com/file/d/1kLPUiJqUATIFl0-5G9eRp4JPlKA01qa-/view?usp=sharing)
+![Giaodien_Dashboard](https://github.com/user-attachments/assets/69067d22-ff45-4861-a597-5dbdfbd88a35)
+
 [Xem thêm tại đây](https://drive.google.com/drive/folders/1nHXQ1bWaEwojZP1lxT9QQT4jBCYwNH0h?usp=drive_link)
 ---
 
