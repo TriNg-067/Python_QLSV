@@ -1,5 +1,3 @@
-![Giaodien_Dashboard](https://github.com/user-attachments/assets/f20a2345-9f85-4853-9aff-3b10199c25e0)# QLSV-Python
-
 ## Mục đích
 Ứng dụng quản lý sinh viên, giáo viên, lớp học, báo cáo, xuất file PDF/Excel, xác thực, gửi mail, v.v.
 
